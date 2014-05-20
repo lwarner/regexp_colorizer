@@ -7,8 +7,8 @@ use Digest::MD5 qw(md5);
 
 sub color_ids {
     my @color_strings = ();
-    for my $foreground ( 31 .. 37 ) {
-	for my $background ( 40 .. 47 ) {
+    for my $foreground ( 31 .. 37, 90..97, 39 ) {
+	for my $background ( 40 .. 47, 100 .. 107, 49 ) {
 	    push(@color_strings, "[0;$background;${foreground}m");
 	}
     }

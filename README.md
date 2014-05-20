@@ -18,3 +18,8 @@ It will accept input from STDIN as well as files passed on the command line.
 It uses the same color when it encounters a UUID a second time (i.e. each instance of a single UUID will be colored 
 with the same combination of foreground and background colors.
 
+## Example
+
+```
+tail -f /var/log/system.log | ./colorizer.pl
+```

@@ -3,7 +3,7 @@
 use strict;
 use Digest::MD5 qw(md5);
 
-
+my $uuidregex="[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}";
 
 sub color_ids {
     my @color_strings = ();
@@ -29,12 +29,30 @@ sub colorize {
     return "$set_color$_[0]$reset_color";
 }
 
+# passed a string with one or more uuids, 
+# returns an array of two strings
+#   string up to and including uuid
+#   remaining string
+sub uuid_substring {
+    my $substring = $_[0];
+    $substring =~ /(^.*?)($uuidregex)(.*$)/;
+    my ($start, $uuidstring, $end) = ($1, $2, $3);
+    ($start.&colorize($uuidstring), $end);
+}
+
 
 sub main  {
     while (<>) {
-	if (/(^.*)([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})(.*$)/)  {
-	    my ($start, $uuidstring, $end) = ($1, $2, $3);
-	    print $start, &colorize($uuidstring), $end, "\n";
+	if (/(^.*)($uuidregex)(.*$)/)  {
+	    #my ($start, $uuidstring, $end) = ($1, $2, $3);
+	    my @count = $_ =~ m/$uuidregex/g;
+	    my $substring = $_;
+	    for my $index (@count) {
+		(my $formatted, $substring) = &uuid_substring($substring);
+		print $formatted
+	    }
+	    print scalar @count; print "\n";
+	    #print $start, &colorize($uuidstring), $end, "\n";
 	} else {
 	    print;
 	}

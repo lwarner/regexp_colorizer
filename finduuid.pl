@@ -1,12 +1,18 @@
 #!/usr/bin/perl -w
 
 use strict;
+use Digest::MD5 qw(md5);
+
 
 my @color_ids = ( 31 .. 37 );
 
+sub numberize {
+	unpack('L', md5($_[0]));
+}
+
 sub colorize {
-        my $index = int(rand(scalar(@color_ids)));
-        # print "\n\n\@color_ids is ".scalar(@color_ids)."\n\$index is '$index'\n\n";
+	my $uuid = $_[0];
+        my $index = &numberize($uuid) % @color_ids;
         my $color_code = $color_ids[$index];
 	my $set_color = "\033[${color_code}m";
 	my $reset_color = "\033[0m";
